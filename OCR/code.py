@@ -8,23 +8,26 @@ tools = pyocr.get_available_tools()
 tool = tools[0]
 
 cap = cv2.VideoCapture(0)
-
+file = open("data.txt", "w")
 while(True):
     # Capture frame-by-frame
     ret, frame = cap.read()
+    
     # Our operations on the frame come here
     txt = tool.image_to_string(
         Image.fromarray(frame),
         builder=pyocr.builders.TextBuilder()
     )
 
-    file = open("data.txt", "w") 
-    file.write(txt) 
-    file.close()
-    
-    cv2.imshow("frame",frame)
+    #Writing the on file
+    file.write(txt)
+    print(txt)
+
     # Display the resulting frame
+    cv2.imshow("frame",frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
+        file.flush()
+        file.close()
         break
 
 # When everything done, release the capture
