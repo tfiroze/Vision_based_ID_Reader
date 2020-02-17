@@ -32,9 +32,9 @@ HOSTELLER
 """
 
 def extract_phone_number(string):
-    pattern=re.compile(r'\d{10}')
+    pattern=re.compile(r'[789][0-9]{9}')
     r=pattern.findall(string)
-    r=r[len(r)-1]
+    r=''.join(r)
     return r
 
 def extract_reg_number(string):
