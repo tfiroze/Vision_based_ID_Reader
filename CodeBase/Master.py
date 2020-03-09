@@ -19,7 +19,7 @@ def extract_names(string):
     newname=' '.join(names)
     return newname
 
-
+#Activate Tesseract
 tools = pyocr.get_available_tools()
 tool = tools[0]
 
@@ -30,24 +30,19 @@ while(True):
     ret, frame = cap.read()
             
     # Our operations on the frame come here
-    txt = tool.image_to_string(
-        Image.fromarray(frame),
-        builder=pyocr.builders.TextBuilder()
-        )
+    txt = tool.image_to_string(Image.fromarray(frame),builder = pyocr.builders.TextBuilder())
         
     RegID = extract_reg_number(txt)
     Name = extract_names(txt)
 
-    #Writing the on file
+    #Writing the on file; Empty files should not be written
     if Name != "":
         if RegID !="":
             f.write(Name)
             f.write(",")
             f.write(RegID)
             f.write("\n")
-    print(txt)
 
-    # Display the resulting frame
     cv2.imshow("frame",frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         f.flush()
@@ -58,3 +53,35 @@ while(True):
 cap.release()
 cv2.destroyAllWindows()
 
+with open('data.txt', 'r') as file:
+    data = file.read()
+
+regs=[]
+
+#Split the string into Names and Registration numbers
+string=re.split('\n|,',data)
+
+#Separate Registration numbers and other redundant data(if any) from list
+for i in string:
+    if(i.isalpha()==False):
+        string.remove(i)
+        regs.append(i)
+
+#Get the frequency of elements and the elements as lists (in ascending order)
+freq=np.unique(string,return_counts=True)[1].tolist()
+val=np.unique(string,return_counts=True)[0].tolist()
+
+regfreq=np.unique(regs,return_counts=True)[1].tolist()
+regval=np.unique(regs,return_counts=True)[0].tolist()
+
+#Get the index where the maximum value is located
+maxindex=freq.index(max(freq))
+maxregindex=regfreq.index(max(regfreq))
+
+#Get the most frequently occuring element
+maxstr=val[maxindex]
+maxreg=regval[maxregindex]
+
+#printing the filtered values
+print(maxstr)
+print(maxreg)
