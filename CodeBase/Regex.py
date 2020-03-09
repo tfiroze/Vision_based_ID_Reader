@@ -38,15 +38,15 @@ def extract_phone_number(string):
     return r
 
 def extract_reg_number(string):
-    pat3=re.compile(r'[1-9][0-9][BM].+')
+    pat3=re.compile(r'[0-2][0-9][B|M][A-Z][A-Z][0-2][0-9][0-9][0-9]')
     re3=pat3.findall(string)
     re3=''.join(re3)
     return re3
 
-numbers = extract_phone_number(stringback)
-regs=extract_reg_number(stringback)
+#numbers = extract_phone_number(stringfront)
+regs=extract_reg_number(stringfront)
 
-print(numbers)
+#print(numbers)
 print('\n')
 print(regs)
 print('\n')
