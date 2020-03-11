@@ -5,6 +5,9 @@ import pyocr.builders
 from PIL import Image
 import re
 
+#Initialize path of the working directory
+path = r"/home/tony/Documents/Computer Vision/Vision_based_ID_Reader/data.txt"
+
 #Regex for Registration Number
 def extract_reg_number(string):
     pat3=re.compile(r'[0-2][0-9][B|M][A-Z][A-Z][0-2][0-9][0-9][0-9]')
@@ -24,14 +27,14 @@ tools = pyocr.get_available_tools()
 tool = tools[0]
 
 cap = cv2.VideoCapture(0)
-f = open("data.txt","w")
+f = open(path,"w")
 while(True):
      # Capture frame-by-frame
     ret, frame = cap.read()
             
     # Our operations on the frame come here
     txt = tool.image_to_string(Image.fromarray(frame),builder = pyocr.builders.TextBuilder())
-        
+
     RegID = extract_reg_number(txt)
     Name = extract_names(txt)
 
@@ -48,12 +51,13 @@ while(True):
         f.flush()
         f.close()
         break
+    
 
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()
 
-with open('data.txt', 'r') as file:
+with open(path, 'r') as file:
     data = file.read()
 
 regs=[]
