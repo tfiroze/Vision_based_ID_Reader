@@ -4,9 +4,13 @@ import pyocr
 import pyocr.builders
 from PIL import Image
 import re
+from firebase import firebase
 
 #Initialize path of the working directory
 path = r"/home/tony/Documents/Computer Vision/Vision_based_ID_Reader/data.txt"
+
+#Firebase path
+firebase = firebase.FirebaseApplication('https://vision-based-id-reader.firebaseio.com/', None)
 
 #Regex for Registration Number
 def extract_reg_number(string):
@@ -26,6 +30,7 @@ def extract_names(string):
 tools = pyocr.get_available_tools()
 tool = tools[0]
 
+#Open Camera
 cap = cv2.VideoCapture(0)
 f = open(path,"w")
 while(True):
@@ -86,6 +91,7 @@ maxregindex=regfreq.index(max(regfreq))
 maxstr=val[maxindex]
 maxreg=regval[maxregindex]
 
-#printing the filtered values
-print(maxstr)
-print(maxreg)
+#printing and post the filtered values
+Creds = {maxstr: maxreg}
+results = firebase.post("/TestData/",Creds)
+print(results)
