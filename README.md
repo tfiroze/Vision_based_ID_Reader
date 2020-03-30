@@ -10,5 +10,5 @@ We clean that data by the logic, 'Most occured data is the right data' and push 
 pip install -r requirements.txt
 
 # Procedure
-Change the path variable to your working directory
+Change the path variable to your working directory.
 Once you show your ID card to the camera for say 4-6 seconds, press 'q' to close the window
