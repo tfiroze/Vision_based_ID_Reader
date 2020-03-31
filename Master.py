@@ -97,3 +97,6 @@ maxreg=regval[maxregindex]
 Creds = {maxstr: maxreg}
 results = firebase.post("/TestData/",Creds)
 print("Your details has been registered as,",results)
+
+#delete the file
+os.remove(path) 
