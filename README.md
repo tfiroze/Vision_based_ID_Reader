@@ -11,6 +11,6 @@ pip install -r requirements.txt on your virtual environment
 
 ## Procedure
 1. Install dependencies on your virtual environment.
-2. Change the path variable to your working directory.
+2. Change the path variable in Master.py to your working directory.
 3. Once you show the front of your ID card to the camera for say 4-6 seconds 
 4. Press 'q' to close the window
