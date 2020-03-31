@@ -6,9 +6,10 @@ import pyocr.builders
 from PIL import Image
 import re
 from firebase import firebase
+import os
 
 #Initialize path of the working directory
-path = r"/home/tony/Vision_based_ID_Reader/data.txt"
+path=os.getcwd()+r"/data.txt"
 
 #Firebase path
 firebase = firebase.FirebaseApplication('https://vision-based-id-reader.firebaseio.com/', None)
