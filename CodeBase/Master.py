@@ -95,4 +95,4 @@ maxreg=regval[maxregindex]
 #printing and post the filtered values
 Creds = {maxstr: maxreg}
 results = firebase.post("/TestData/",Creds)
-print(results)
+print("Your details has been registered as,"results)
