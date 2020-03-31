@@ -97,5 +97,9 @@ if os.path.getsize(path) > 0:
     Creds = {maxstr: maxreg}
     results = firebase.post("/TestData/",Creds)
     print("Your details has been registered as,",results)
+
 else:
     print("No ID Card was detected. Please try again")
+
+#delete the file
+os.remove(path) 
