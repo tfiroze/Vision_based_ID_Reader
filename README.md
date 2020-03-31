@@ -7,8 +7,10 @@ The OCR dumps all kinds of data, which we clean by means of Regex and stored in 
 We clean that data by the logic, 'Most occured data is the right data' and push that to firebase as a dictionary with Registration Number as Key and Name as value
 
 ## Packages and Dependencies
-pip install -r requirements.txt
+pip install -r requirements.txt on your virtual environment
 
 ## Procedure
-Change the path variable to your working directory.
-Once you show the front of your ID card to the camera for say 4-6 seconds, press 'q' to close the window
+1. Install dependencies on your virtual environment.
+2. Change the path variable to your working directory.
+3. Once you show the front of your ID card to the camera for say 4-6 seconds 
+4. Press 'q' to close the window
