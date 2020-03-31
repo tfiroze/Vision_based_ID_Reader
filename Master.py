@@ -8,7 +8,7 @@ import re
 from firebase import firebase
 
 #Initialize path of the working directory
-path = r"/home/tony/Documents/Computer Vision/Vision_based_ID_Reader/data.txt"
+path = r"/home/tony/Vision_based_ID_Reader/data.txt"
 
 #Firebase path
 firebase = firebase.FirebaseApplication('https://vision-based-id-reader.firebaseio.com/', None)
