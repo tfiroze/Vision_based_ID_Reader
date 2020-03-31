@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import numpy as np
 import cv2
 import pyocr
@@ -7,7 +8,7 @@ import re
 from firebase import firebase
 
 #Initialize path of the working directory
-path = r"/home/tony/Documents/Computer Vision/Vision_based_ID_Reader/data.txt"
+path = r"/home/tony/Vision_based_ID_Reader/data.txt"
 
 #Firebase path
 firebase = firebase.FirebaseApplication('https://vision-based-id-reader.firebaseio.com/', None)
@@ -94,4 +95,4 @@ maxreg=regval[maxregindex]
 #printing and post the filtered values
 Creds = {maxstr: maxreg}
 results = firebase.post("/TestData/",Creds)
-print(results)
+print("Your details has been registered as,",results)
