@@ -11,4 +11,4 @@ pip install -r requirements.txt
 
 # Procedure
 Change the path variable to your working directory.
-Once you show your ID card to the camera for say 4-6 seconds, press 'q' to close the window
+Once you show the front of your ID card to the camera for say 4-6 seconds, press 'q' to close the window
