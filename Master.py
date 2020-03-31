@@ -8,7 +8,7 @@ import re
 from firebase import firebase
 import os
 
-#Initialize path of the working directory
+#Initialize path of the working directory and temporary file
 path=os.getcwd()+r"/data.txt"
 
 #Firebase path
@@ -58,45 +58,49 @@ while(True):
         f.flush()
         f.close()
         break
-    
-
+        
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()
 
-with open(path, 'r') as file:
-    data = file.read()
+if os.path.getsize(path) > 0:
+    with open(path, 'r') as file:
+        data = file.read()
 
-regs=[]
+    regs=[]
 
-#Split the string into Names and Registration numbers
-string=re.split('\n|,',data)
+    #Split the string into Names and Registration numbers
+    string=re.split('\n|,',data)
 
-#Separate Registration numbers and other redundant data(if any) from list
-for i in string:
-    if(i.isalpha()==False):
-        string.remove(i)
-        regs.append(i)
+    #Separate Registration numbers and other redundant data(if any) from list
+    for i in string:
+        if(i.isalpha()==False):
+            string.remove(i)
+            regs.append(i)
 
-#Get the frequency of elements and the elements as lists (in ascending order)
-freq=np.unique(string,return_counts=True)[1].tolist()
-val=np.unique(string,return_counts=True)[0].tolist()
+    #Get the frequency of elements and the elements as lists (in ascending order)
+    freq=np.unique(string,return_counts=True)[1].tolist()
+    val=np.unique(string,return_counts=True)[0].tolist()
 
-regfreq=np.unique(regs,return_counts=True)[1].tolist()
-regval=np.unique(regs,return_counts=True)[0].tolist()
+    regfreq=np.unique(regs,return_counts=True)[1].tolist()
+    regval=np.unique(regs,return_counts=True)[0].tolist()
 
-#Get the index where the maximum value is located
-maxindex=freq.index(max(freq))
-maxregindex=regfreq.index(max(regfreq))
+    #Get the index where the maximum value is located
+    maxindex=freq.index(max(freq))
+    maxregindex=regfreq.index(max(regfreq))
 
-#Get the most frequently occuring element
-maxstr=val[maxindex]
-maxreg=regval[maxregindex]
+    #Get the most frequently occuring element
+    maxstr=val[maxindex]
+    maxreg=regval[maxregindex]
 
-#printing and post the filtered values
-Creds = {maxstr: maxreg}
-results = firebase.post("/TestData/",Creds)
-print("Your details has been registered as,",results)
+    #printing and post the filtered values
+    Creds = {maxstr: maxreg}
+    results = firebase.post("/TestData/",Creds)
+    print("Your details has been registered as,",results)
+    
+    #delete the file
+    os.remove(path) 
 
-#delete the file
-os.remove(path) 
+else:
+    print("No ID Card was detected. Please try again")
+
