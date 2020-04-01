@@ -95,10 +95,16 @@ if os.path.getsize(path) > 0:
 
     #printing and post the filtered values
     Creds = {"Registration Number": ID,"Name":Name}
-    results = firebase.post("/TestData/",Creds)
-    print("Your details have been registered")
-    print("Name:",Name)
-    print("Registration Number:",ID)
+    print("\nName:",Name)
+    print("\nRegistration Number:",ID)
+    print("Confirm the details (y/n)")
+    submit = input()
+    if(submit):
+        results = firebase.post("/TestData/",Creds)
+        print("Your details have been registered")
+    else:
+        print("Try Again")
+        os.remove(path) 
     
 else:
     print("No ID Card was detected. Please try again")
