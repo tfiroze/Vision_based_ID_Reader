@@ -94,7 +94,7 @@ if os.path.getsize(path) > 0:
     Name=regval[maxregindex]
 
     #printing and post the filtered values
-    Creds = {Name: ID}
+    Creds = {ID: Name}
     results = firebase.post("/TestData/",Creds)
     print("Your details has been registered as,",results)
 
