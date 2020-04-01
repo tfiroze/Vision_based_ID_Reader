@@ -95,9 +95,9 @@ if os.path.getsize(path) > 0:
 
     #printing and post the filtered values
     Creds = {"Registration Number": ID,"Name":Name}
-    print("\nName:",Name)
-    print("\nRegistration Number:",ID)
-    print("Confirm the details (y/n)")
+    print("Name:",Name)
+    print("Registration Number:",ID)
+    print("\nConfirm the details (y/n)")
     submit = input()
     if(submit):
         results = firebase.post("/TestData/",Creds)
