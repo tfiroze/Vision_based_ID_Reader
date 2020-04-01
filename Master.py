@@ -7,6 +7,7 @@ from PIL import Image
 import re
 from firebase import firebase
 import os
+from random import randint
 
 # Initialize path of the working directory and temporary file
 path = os.getcwd()+r"/data.txt"
@@ -15,14 +16,14 @@ path = os.getcwd()+r"/data.txt"
 firebase = firebase.FirebaseApplication(
     'https://vision-based-id-reader.firebaseio.com/', None)
 
+
 # Regex for Registration Number
-
-
 def extract_reg_number(string):
     pat3 = re.compile(r'[0-2][0-9][B|M][A-Z][A-Z][0-2][0-9][0-9][0-9]')
     re3 = pat3.findall(string)
     re3 = ''.join(re3)
     return re3
+
 
 # Regex for Name
 def extract_names(string):
@@ -30,6 +31,20 @@ def extract_names(string):
     names = pattern.findall(string)
     newname = ' '.join(names)
     return newname
+
+# Regex for phoneNumber
+def extract_number(string):
+    extracted = re.compile(r'[1-9][0-9]{9}')
+    number = extracted.findall(string)
+    number = ''.join(number)
+    return number
+
+# Generating a random phone number
+def random_number(n):
+    range_start = 10**(n-1)
+    range_end = (10**n)-1
+    return randint(range_start, range_end)
+
 
 # Activate Tesseract
 tools = pyocr.get_available_tools()
@@ -48,14 +63,25 @@ while(True):
 
     RegID = extract_reg_number(txt)
     Name = extract_names(txt)
+    ContactNumber = extract_number(txt)
 
     # Writing the on file; Empty files should not be written
     if Name != "":
         if RegID != "":
-            f.write(Name)
-            f.write(",")
-            f.write(RegID)
-            f.write("\n")
+            if ContactNumber == "":
+                f.write(Name)
+                f.write(",")
+                f.write(RegID)
+                f.write(",")
+                f.write(str(random_number(10)))
+                f.write("\n")
+            else:
+                f.write(str(random_number(5)))
+                f.write(",")
+                f.write(str(random_number(5)))
+                f.write(",")
+                f.write(ContactNumber)
+                f.write("\n")
 
     cv2.imshow("frame", frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -85,6 +111,9 @@ if os.path.getsize(path) > 0:
     # Get the frequency of elements and the elements as lists (in ascending order)
     freq = np.unique(string, return_counts=True)[1].tolist()
     val = np.unique(string, return_counts=True)[0].tolist()
+    
+    phnfreq = np.unique(string,return_counts= True)[1].tolist()
+    phnval=np.unique(string,return_counts=True)[0].tolist() 
 
     regfreq = np.unique(regs, return_counts=True)[1].tolist()
     regval = np.unique(regs, return_counts=True)[0].tolist()
@@ -92,15 +121,22 @@ if os.path.getsize(path) > 0:
     # Get the index where the maximum value is located
     maxindex = freq.index(max(freq))
     maxregindex = regfreq.index(max(regfreq))
+    maxphnindex = phnfreq.index(max(phnfreq))
 
     # Get the most frequently occuring element
     ID = val[maxindex]
     Name = regval[maxregindex]
+    phoneNumber = phnval[maxphnindex]
 
     # printing and post the filtered values
-    Creds = {"Registration Number": ID, "Name": Name}
+    Creds = {
+        "Registration Number": ID, 
+        "Name": Name,
+        "Contact Details": phoneNumber
+        }
     print("Name:", Name)
     print("Registration Number:", ID)
+    print("Contact Details", phoneNumber)
     print("\nConfirm the details (y/n)")
     submit = input()
     if(submit == 'y'):
@@ -108,8 +144,6 @@ if os.path.getsize(path) > 0:
         print("Your details have been registered")
     else:
         print("Try Again")
-        os.remove(path)
-
 else:
     print("No ID Card was detected. Please try again")
 
