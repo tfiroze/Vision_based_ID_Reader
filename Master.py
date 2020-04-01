@@ -90,11 +90,11 @@ if os.path.getsize(path) > 0:
     maxregindex=regfreq.index(max(regfreq))
 
     #Get the most frequently occuring element
-    maxstr=val[maxindex]
-    maxreg=regval[maxregindex]
+    ID=val[maxindex]
+    Name=regval[maxregindex]
 
     #printing and post the filtered values
-    Creds = {maxstr: maxreg}
+    Creds = {Name: ID}
     results = firebase.post("/TestData/",Creds)
     print("Your details has been registered as,",results)
 
