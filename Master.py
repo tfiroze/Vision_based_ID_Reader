@@ -100,7 +100,6 @@ if os.path.getsize(path) > 0:
     print("Name:",Name)
     print("Registration Number:",ID)
     
-
 else:
     print("No ID Card was detected. Please try again")
 
