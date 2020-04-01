@@ -12,12 +12,9 @@ import os
 path = os.getcwd()+r"/data.txt"
 
 # Firebase path
-firebase = firebase.FirebaseApplication(
-    'https://vision-based-id-reader.firebaseio.com/', None)
+firebase = firebase.FirebaseApplication('https://vision-based-id-reader.firebaseio.com/', None)
 
 # Regex for Registration Number
-
-
 def extract_reg_number(string):
     pat3 = re.compile(r'[0-2][0-9][B|M][A-Z][A-Z][0-2][0-9][0-9][0-9]')
     re3 = pat3.findall(string)
