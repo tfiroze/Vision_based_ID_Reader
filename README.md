@@ -12,7 +12,7 @@ pip install -r requirements.txt on your virtual environment
 ## Procedure
 1. Install dependencies on your virtual environment.
 2. Show the front of your ID card to the camera for say 3 seconds 
-3. Press 'q' to close the window
+3. Rotate the ID Card
 4. Show the back,especially the phone number area for 3 seconds
 5. Press 'q' to close
 6. A prompt shows the details it has read, if right press "y" and it will get updated in the database
