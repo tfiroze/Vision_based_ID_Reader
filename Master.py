@@ -76,31 +76,45 @@ if os.path.getsize(path) > 0:
     with open(path, 'r') as file:
         data = file.read()
 
-    regs = []
+    nameList = []           # nameList contains a list of extracted names
+    regNoList = []          # negNoList contains a list of extracted registration number
 
     # Split the string into Names and Registration numbers
     string = re.split('\n|,', data)
-
     # Separate Registration numbers and other redundant data(if any) from list
     for i in string:
-        if(i.isalpha() == False):
-            string.remove(i)
-            regs.append(i)
+        m = re.search(r'\d+$', i)
+        if(m is not None):
+            regNoList.append(i)
+        else:
+            nameList.append(i)
+
+    # print(nameList)
+    # print("*"*130)
+    # print("*"*130)
+    # print(regNoList)
 
     # Get the frequency of elements and the elements as lists (in ascending order)
-    freq = np.unique(string, return_counts=True)[1].tolist()
-    val = np.unique(string, return_counts=True)[0].tolist()
-
-    regfreq = np.unique(regs, return_counts=True)[1].tolist()
-    regval = np.unique(regs, return_counts=True)[0].tolist()
+    regfreq = np.unique(regNoList, return_counts=True)[1].tolist()
+    regval = np.unique(regNoList, return_counts=True)[0].tolist()
+    # print(regfreq)
+    # print(regval)
+    
+    namefreq = np.unique(nameList, return_counts=True)[1].tolist()
+    nameval = np.unique(nameList, return_counts=True)[0].tolist()
+    print(namefreq)
+    print(nameval)
 
     # Get the index where the maximum value is located
-    maxindex = freq.index(max(freq))
-    maxregindex = regfreq.index(max(regfreq))
+    maxNameIndex = regfreq.index(max(regfreq))
+    maxRegIndex = namefreq.index(max(namefreq))
 
     # Store Name and Reg Number
-    ID = val[maxindex]
-    Name = regval[maxregindex]
+    ID = regval[maxNameIndex]
+    Name = nameval[maxRegIndex]
+
+    print(ID)
+    print(Name)
     os.remove(path)
 
 #Phone Number
