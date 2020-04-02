@@ -7,6 +7,7 @@ from PIL import Image
 import re
 from firebase import firebase
 import os
+import statistics
 
 # Initialize path of the working directory and temporary file
 path = os.getcwd()+r"/data.txt"
@@ -27,6 +28,13 @@ def extract_names(string):
     names = pattern.findall(string)
     newname = ' '.join(names)
     return newname
+
+#Regex for Phone Number
+def extract_phoneNo(string):
+    pat2 = re.compile(r'[6-9][0-9]{9}')
+    number = pat2.findall(string)
+    number = ''.join(number)
+    return number
 
 # Activate Tesseract
 tools = pyocr.get_available_tools()
@@ -90,19 +98,52 @@ if os.path.getsize(path) > 0:
     maxindex = freq.index(max(freq))
     maxregindex = regfreq.index(max(regfreq))
 
-    # Get the most frequently occuring element
+    # Store Name and Reg Number
     ID = val[maxindex]
     Name = regval[maxregindex]
+    os.remove(path)
 
-    # printing and post the filtered values
-    Creds = {"Registration Number": ID, "Name": Name}
+#Phone Number
+cap = cv2.VideoCapture(0)
+f = open(path, "w")
+while(True):
+    # Capture frame-by-frame
+    ret, frame = cap.read()
+
+    # Our operations on the frame come here
+    txt = tool.image_to_string(Image.fromarray(frame), builder=pyocr.builders.TextBuilder())
+    
+    PhoneNumber = extract_phoneNo(txt)
+    if PhoneNumber != "":
+        f.write(PhoneNumber)
+        f.write("\n")
+
+    cv2.imshow("frame", frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        f.flush()
+        f.close()
+        break
+cap.release()
+cv2.destroyAllWindows()
+
+regs =[]
+if os.path.getsize(path) > 0:
+    with open(path, 'r') as file:
+        PhoneNumber = file.read()
+        with open(path) as f:
+            lines = [line.rstrip() for line in f]
+        contactNumber = statistics.mode(lines)
+# printing and post the filtered values
+    Creds = {"Registration Number": ID, "Name": Name,"Contact Number":contactNumber}
     print("Name:", Name)
     print("Registration Number:", ID)
+    print("Contact Number:", contactNumber)
     print("\nConfirm the details (y/n)")
     submit = input()
     if(submit == 'y'):
         results = firebase.post("/TestData/", Creds)
         print("Your details have been registered")
+        os.remove(path)
     else:
         print("Try Again")
         os.remove(path)
@@ -110,5 +151,5 @@ if os.path.getsize(path) > 0:
 else:
     print("No ID Card was detected. Please try again")
 
-# delete the file
-os.remove(path)
+    # delete the file
+    os.remove(path)
