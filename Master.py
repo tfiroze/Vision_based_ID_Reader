@@ -140,7 +140,7 @@ if os.path.getsize(path) > 0:
     print("Contact Number:", contactNumber)
     print("\nConfirm the details (y/n)")
     submit = input()
-    if(submit.lower == 'y' & Name != '' & ID != '' & contactNumber!='' ):
+    if((submit.lower == 'y') and (Name != '') and (ID != '') and (contactNumber!='' )):
         results = firebase.post("/TestData/", Creds)
         print("Your details have been registered")
         os.remove(path)
