@@ -4,7 +4,7 @@ The objective of the project is to read and store data from an ID Card using a c
 
 The front of the ID card of VIT University contains Registration Number and Name of the student which is what we aim to extract. 
 The OCR dumps all kinds of data, which we clean by means of Regex and stored in a file named data.txt
-We clean that data by the logic, 'Most occured entry is the right entry' and push that to firebase
+We clean that data by the logic, 'Most occured entry is the right entry'. Name and RegNo is now stored. Same is done with the back side for phone number.
 
 ## Packages and Dependencies
 pip install -r requirements.txt on your virtual environment
@@ -13,3 +13,6 @@ pip install -r requirements.txt on your virtual environment
 1. Install dependencies on your virtual environment.
 2. Show the front of your ID card to the camera for say 3 seconds 
 3. Press 'q' to close the window
+4. Show the back,especially the phone number area for 3 seconds
+5. Press 'q' to close
+6. A prompt shows the details it has read, if right press "y" and it will get updated in the database
