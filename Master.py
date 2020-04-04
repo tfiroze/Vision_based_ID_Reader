@@ -6,11 +6,10 @@ import pyocr.builders
 from PIL import Image
 import re
 from firebase import firebase
-import os
-import statistics
 
-# Initialize path of the working directory and temporary file
-path = os.getcwd()+r"/data.txt"
+nameList = []           # nameList contains a list of extracted names
+regNoList = []          # regNoList contains a list of extracted registration number
+phoneNoList = []        # phoneNoList contains a list of exreacted contact details
 
 # Firebase path
 firebase = firebase.FirebaseApplication('https://vision-based-id-reader.firebaseio.com/', None)
@@ -42,114 +41,62 @@ tool = tools[0]
 
 # Open Camera
 cap = cv2.VideoCapture(0)
-f = open(path, "w")
 while(True):
-    # Capture frame-by-frame
     ret, frame = cap.read()
-
-    # Our operations on the frame come here
-    txt = tool.image_to_string(Image.fromarray(
-        frame), builder=pyocr.builders.TextBuilder())
+    txt = tool.image_to_string(Image.fromarray(frame), builder=pyocr.builders.TextBuilder())
 
     RegID = extract_reg_number(txt)
     Name = extract_names(txt)
+    PhoneNumber = extract_phoneNo(txt)
 
-    # Writing the on file; Empty files should not be written
-    if Name != "":
-        if RegID != "":
-            f.write(Name)
-            f.write(",")
-            f.write(RegID)
-            f.write("\n")
+    if(RegID != ""):
+        regNoList.append(RegID)
+
+    if(Name != ""):
+        nameList.append(Name)
+    
+    if(PhoneNumber != ""):
+        phoneNoList.append(PhoneNumber)
+
 
     cv2.imshow("frame", frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
-        f.flush()
-        f.close()
         break
 
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()
 
-if os.path.getsize(path) > 0:
-    with open(path, 'r') as file:
-        data = file.read()
 
-    regs = []
-
-    # Split the string into Names and Registration numbers
-    string = re.split('\n|,', data)
-
-    # Separate Registration numbers and other redundant data(if any) from list
-    for i in string:
-        if(i.isalpha() == False):
-            string.remove(i)
-            regs.append(i)
-
-    # Get the frequency of elements and the elements as lists (in ascending order)
-    freq = np.unique(string, return_counts=True)[1].tolist()
-    val = np.unique(string, return_counts=True)[0].tolist()
-
-    regfreq = np.unique(regs, return_counts=True)[1].tolist()
-    regval = np.unique(regs, return_counts=True)[0].tolist()
-
-    # Get the index where the maximum value is located
-    maxindex = freq.index(max(freq))
-    maxregindex = regfreq.index(max(regfreq))
-
-    # Store Name and Reg Number
-    ID = val[maxindex]
-    Name = regval[maxregindex]
-    os.remove(path)
-
-#Phone Number
-cap = cv2.VideoCapture(0)
-f = open(path, "w")
-while(True):
-    # Capture frame-by-frame
-    ret, frame = cap.read()
-
-    # Our operations on the frame come here
-    txt = tool.image_to_string(Image.fromarray(frame), builder=pyocr.builders.TextBuilder())
+# Get the frequency of elements and the elements as lists (in ascending order)
+regfreq = np.unique(regNoList, return_counts=True)[1].tolist()
+regval = np.unique(regNoList, return_counts=True)[0].tolist()
     
-    PhoneNumber = extract_phoneNo(txt)
-    if PhoneNumber != "":
-        f.write(PhoneNumber)
-        f.write("\n")
+namefreq = np.unique(nameList, return_counts=True)[1].tolist()
+nameval = np.unique(nameList, return_counts=True)[0].tolist()
 
-    cv2.imshow("frame", frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        f.flush()
-        f.close()
-        break
-cap.release()
-cv2.destroyAllWindows()
+phonefreq = np.unique(phoneNoList, return_counts=True)[1].tolist()
+phoneval = np.unique(phoneNoList, return_counts=True)[0].tolist()
 
-regs =[]
-if os.path.getsize(path) > 0:
-    with open(path, 'r') as file:
-        PhoneNumber = file.read()
-        with open(path) as f:
-            lines = [line.rstrip() for line in f]
-        contactNumber = statistics.mode(lines)
-# printing and post the filtered values
-    Creds = {"Registration Number": ID, "Name": Name,"Contact Number":contactNumber}
-    print("Name:", Name)
-    print("Registration Number:", ID)
-    print("Contact Number:", contactNumber)
-    print("\nConfirm the details (y/n)")
-    submit = input()
-    if(submit == "y"):
-        results = firebase.post("/TestData/", Creds)
-        print("Your details have been registered")
-        os.remove(path)
-    else:
-        print("Try Again")
-        os.remove(path)
+# Get the index where the maximum value is located
+maxNameIndex = regfreq.index(max(regfreq))
+maxRegIndex = namefreq.index(max(namefreq))
+maxPhoneIndex = phonefreq.index(max(phonefreq))
 
+# Store Name and Reg Number
+ID = regval[maxNameIndex]
+Name = nameval[maxRegIndex]
+Contact = phoneval[maxPhoneIndex]
+
+Creds = {"Registration Number": ID, "Name": Name,"Contact Number":Contact}
+print("Name:", Name)
+print("Registration Number:", ID)
+print("Contact Number:", Contact)
+print("\nConfirm the details (y/n)")
+
+submit = input()
+if(submit == 'y'):
+    results = firebase.post("/TestData/", Creds)
+    print("Your details have been registered")
 else:
-    print("No ID Card was detected. Please try again")
-
-    # delete the file
-    os.remove(path)
+    print("Try Again")
