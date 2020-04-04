@@ -94,7 +94,6 @@ print("Registration Number:", ID)
 print("Contact Number:", Contact)
 print("\nConfirm the details (y/n)")
 
-
 submit = input()
 if(submit == 'y'):
     results = firebase.post("/TestData/", Creds)
