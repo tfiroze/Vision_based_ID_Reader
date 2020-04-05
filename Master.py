@@ -7,6 +7,8 @@ from PIL import Image
 import re
 from firebase import firebase
 
+
+# Lists serve as the file
 nameList = []           # nameList contains a list of extracted names
 regNoList = []          # regNoList contains a list of extracted registration number
 phoneNoList = []        # phoneNoList contains a list of exreacted contact details
