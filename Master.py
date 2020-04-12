@@ -90,8 +90,9 @@ if regfreq == [] and namefreq == []:
     print("No ID Card Detected")
 elif phonefreq ==[]:
     print("Back side of the ID Card wasn't read properly")
+
+#Get the index where the maximum value is located
 else:
-    # Get the index where the maximum value is located
     maxNameIndex = regfreq.index(max(regfreq))
     maxRegIndex = namefreq.index(max(namefreq))
     maxPhoneIndex = phonefreq.index(max(phonefreq))
@@ -102,7 +103,8 @@ else:
     Name = nameval[maxRegIndex]
     Contact = phoneval[maxPhoneIndex]
     Time = Time.strftime("%H:%M:%S %d-%m-%Y")
-
+    
+    #Pushing to Firebase
     Creds = {"Time":Time,"Registration Number": ID, "Name": Name,"Contact Number":Contact}
     print("Name:", Name)
     print("Registration Number:", ID)
