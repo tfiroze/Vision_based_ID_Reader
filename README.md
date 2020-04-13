@@ -7,7 +7,8 @@ The OCR dumps all kinds of data, which we clean by means of Regex and stored in 
 We clean that data by the logic, 'Most occured entry is the right entry'. Name and RegNo is now stored. Same is done with the back side for phone number.
 
 ## Packages and Dependencies
-pip install -r requirements.txt on your virtual environment.  If by any means you recieve the error "Index out of range", follow this link: [https://stackoverflow.com/questions/31892413/no-tools-available-from-pyocr]
+pip install -r requirements.txt on your virtual environment.  
+If by any means you recieve the error "Index out of range", follow this link: https://stackoverflow.com/questions/31892413/no-tools-available-from-pyocr
 
 
 ## Procedure
