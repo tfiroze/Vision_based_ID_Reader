@@ -11,7 +11,7 @@ pip install -r requirements.txt on your virtual environment.
 If by any means you recieve the error "Index out of range", follow this link: https://stackoverflow.com/questions/31892413/no-tools-available-from-pyocr
 
 
-## Procedure
+## Procedure for Computer
 1. Install dependencies on your virtual environment.
 2. Show the front of your ID card to the camera for say 3 seconds followed by the back for the same duration.
 3. Press 'q' to close the window.
