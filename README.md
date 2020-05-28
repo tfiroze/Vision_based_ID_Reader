@@ -20,6 +20,6 @@ If by any means you recieve the error "Index out of range", follow this link: ht
 
 ## Procedure for Raspberry Pi
 1. Install dependencies.
-2. Show the front of your ID card to the camera for say 3 seconds.
+2. Show the front of your ID card to the camera for say 10 seconds at the focus for better results.
 3. Hold the Button until the LED flashes.
 4. A prompt shows the details it has read. If right,hold the button and it will get updated in the databas. If not, leave it be and it is regarded as a false entry.
