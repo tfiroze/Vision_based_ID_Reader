@@ -4,6 +4,5 @@ def timeandlocation():
   loclist = ['Technology Tower', 'Silver Jubilee Tower']
   n=random.randint(0,len(timelist)-1)
   m=random.randint(0,1)
-  #dic={'Time': timelist[n], 'Location' : loclist[m]}
-  #print(dic)
   return timelist[n],loclist[m]
+
