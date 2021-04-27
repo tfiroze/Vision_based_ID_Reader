@@ -113,7 +113,7 @@ else:
 
     submit = input()
     if(submit == 'y'):
-        results = firebase.post("/TestData/", Creds)
+        results = firebase.post(Creds)
         print("Your details have been registered")
     else:
         print("Oops! Try Again")
